@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        body { background: #111; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        button { height: 120px; font-size: 24px; font-weight: bold; border-radius: 15px; border: none; cursor: pointer; color: white; }
+        .b1 { background: #e67e22; } .b10 { background: #e74c3c; } 
+        .b100 { background: #9b59b6; } .b1000 { background: #2ecc71; }
+    </style>
+</head>
+<body>
+    <button class="b1" onclick="send('1money')">1 COIN</button>
+    <button class="b10" onclick="send('10money')">10 COINS</button>
+    <button class="b100" onclick="send('100money')">100 COINS</button>
+    <button class="b1000" onclick="send('1000money')">1000 COINS</button>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0vnNDkHIq2z1qR9Eyg27A1EqcGP1D0JA",
+            authDomain: "tiktok-e72af.firebaseapp.com",
+            databaseURL: "https://tiktok-e72af-default-rtdb.firebaseio.com",
+            projectId: "tiktok-e72af"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        function send(name) { db.ref('currentGift').set(name); }
+    </script>
+</body>
+</html>
