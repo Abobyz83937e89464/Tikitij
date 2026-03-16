@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Stage</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <img src="glavnaya.png" class="gift-list">
+        <div class="main-actor">
+            <img src="stand.png" id="mainImage">
+        </div>
+        <div class="basement">
+            <marquee scrollamount="10">ОТПРАВЛЯЙ ПОДАРКИ — ПОЛУЧАЙ РЕАКЦИЮ! 🎁 ЖДУ РОЗУ! 🌹</marquee>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0vnNDkHIq2z1qR9Eyg27A1EqcGP1D0JA",
+            authDomain: "tiktok-e72af.firebaseapp.com",
+            databaseURL: "https://tiktok-e72af-default-rtdb.firebaseio.com", // Я подставил стандартный URL
+            projectId: "tiktok-e72af",
+            storageBucket: "tiktok-e72af.firebasestorage.app",
+            messagingSenderId: "49164474318",
+            appId: "1:49164474318:web:ad40a70c566410dc95fd9f"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const mainImg = document.getElementById('mainImage');
+
+        db.ref('currentGift').on('value', (snapshot) => {
+            const gift = snapshot.val();
+            if (gift && gift !== "stand") {
+                mainImg.src = gift + ".png";
+                setTimeout(() => {
+                    mainImg.src = "stand.png";
+                    db.ref('currentGift').set("stand");
+                }, 4000); // 4 секунды на пощечину
+            }
+        });
+    </script>
+</body>
+</html>
