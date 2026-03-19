@@ -1,37 +1,31 @@
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     background-color: #000;
     color: white;
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     height: 100vh;
     width: 100vw;
-    overflow: hidden; /* Чтобы ничего не дергалось */
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    flex: 1; /* Занимает всё место до подвала */
-    position: relative;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Список подарков (слева или справа) */
+/* Картинка списка подарков (которую можно двигать) */
 .gift-list {
     position: absolute;
-    left: 5px;
-    top: 20%;
-    width: 25%; /* Относительно ширины экрана */
-    max-width: 120px;
-    z-index: 10;
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+    left: 10px; /* Стартовая позиция */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px; /* Увеличил размер, был 200px */
+    z-index: 100; /* Самая верхняя */
+    touch-action: none; /* Важно для перетаскивания */
+    cursor: move;
 }
 
 /* Главный персонаж */
@@ -44,23 +38,28 @@ body {
 }
 
 .main-actor img {
-    max-width: 90%;
-    max-height: 75vh; /* Чтобы не залезал под подвал */
+    max-width: 95%;
+    max-height: 85vh; /* Стал выше, был 80vh */
     object-fit: contain;
 }
 
-/* Тот самый подвал */
+/* Подвал с бегущей строкой */
 .basement {
-    height: 60px;
-    background: linear-gradient(0deg, #1a0000 0%, #330000 100%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Стал выше, был 60px */
+    background: linear-gradient(0deg, #1a0000 0%, #cc0000 100%);
     border-top: 3px solid #ff0000;
     display: flex;
     align-items: center;
+    color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 22px; /* Текст крупнее */
     text-transform: uppercase;
-    color: #fff;
-    text-shadow: 2px 2px 4px #000;
+    text-shadow: 2px 2px 5px black;
+    z-index: 10;
 }
 
 marquee {
