@@ -1,7 +1,7 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -10,53 +10,71 @@ body {
     font-family: 'Segoe UI', sans-serif;
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
+    overflow: hidden; /* Чтобы ничего не дергалось и не скроллилось */
+    display: flex;
+    flex-direction: column; /* Вертикальный столб, чтобы подвал был внизу */
+}
+
+/* Основная игровая зона */
+.container {
+    flex: 1; /* Занимает всё свободное место до подвала */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
-/* Картинка списка подарков (которую можно двигать) */
-.gift-list {
-    position: absolute;
-    left: 10px; /* Стартовая позиция */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 250px; /* Увеличил размер, был 200px */
-    z-index: 100; /* Самая верхняя */
-    touch-action: none; /* Важно для перетаскивания */
-    cursor: move;
-}
-
-/* Главный персонаж */
+/* ГЛАВНАЯ КАРТИНКА ПЕРСОНАЖА */
 .main-actor {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 .main-actor img {
-    max-width: 95%;
-    max-height: 85vh; /* Стал выше, был 80vh */
-    object-fit: contain;
+    /* Делаем картинку по-настоящему огромной */
+    max-width: 90vw; /* 90% ширины экрана */
+    max-height: 75vh; /* 75% высоты экрана */
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Чтобы не сплющивалась */
+    filter: drop-shadow(0 0 10px rgba(255,0,0,0.5)); /* Красное свечение */
 }
 
-/* Подвал с бегущей строкой */
-.basement {
+/* КАРТИНКА МЕНЮ ПОДАРКОВ (glavnaya.png), которую можно двигать */
+.gift-list {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    left: 20px; /* Стартовая позиция */
+    top: 20%;
+    
+    /* Делаем её заметной, крупной */
+    width: 60vw; /* 60% ширины экрана */
+    max-width: 400px; /* Ограничение для широких экранов */
+    
+    z-index: 100; /* Поверх всего */
+    cursor: move;
+    touch-action: none; /* Обязательно для перетаскивания */
+    border: 2px solid rgba(255,215,0,0.5); /* Золотая рамочка */
+    border-radius: 10px;
+    filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));
+}
+
+/* ПОДВАЛ, ПРИЛИПШИЙ К НИЗУ */
+.basement {
+    height: 80px; /* Сделал еще выше, чтобы текст был крупный */
     width: 100%;
-    height: 70px; /* Стал выше, был 60px */
-    background: linear-gradient(0deg, #1a0000 0%, #cc0000 100%);
-    border-top: 3px solid #ff0000;
+    background: linear-gradient(0deg, #1a0000 0%, #cc0000 100%); /* Градиент от темного к ярко-красному */
+    border-top: 4px solid #ff0000;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: white;
     font-weight: bold;
-    font-size: 22px; /* Текст крупнее */
+    font-size: 28px; /* ОГРОМНЫЙ ШРИФТ */
     text-transform: uppercase;
     text-shadow: 2px 2px 5px black;
     z-index: 10;
