@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Stream Stage</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -10,20 +10,23 @@
 </head>
 <body>
     <div class="container">
-        <img src="glavnaya.png" class="gift-list">
+        <img src="glavnaya.png" class="gift-list" id="giftList">
+
         <div class="main-actor">
             <img src="stand.png" id="mainImage">
         </div>
+        
         <div class="basement">
-            <marquee scrollamount="10">ОТПРАВЛЯЙ ПОДАРКИ — ПОЛУЧАЙ РЕАКЦИЮ! 🎁 ЖДУ РОЗУ! 🌹</marquee>
+            <marquee scrollamount="12">🎁 ОТПРАВЛЯЙ ПОДАРКИ — БАЙТЬ НА РЕАКЦИЮ! РОЗА = ПОЩЕЧИНА! 🌹 ЖДУ!</marquee>
         </div>
     </div>
 
     <script>
+        // ТВОЙ ОРИГИНАЛЬНЫЙ КОНФИГ FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyA0vnNDkHIq2z1qR9Eyg27A1EqcGP1D0JA",
             authDomain: "tiktok-e72af.firebaseapp.com",
-            databaseURL: "https://tiktok-e72af-default-rtdb.firebaseio.com", // Я подставил стандартный URL
+            databaseURL: "https://tiktok-e72af-default-rtdb.firebaseio.com",
             projectId: "tiktok-e72af",
             storageBucket: "tiktok-e72af.firebasestorage.app",
             messagingSenderId: "49164474318",
@@ -34,6 +37,7 @@
         const db = firebase.database();
         const mainImg = document.getElementById('mainImage');
 
+        // Логика смены картинок подарков
         db.ref('currentGift').on('value', (snapshot) => {
             const gift = snapshot.val();
             if (gift && gift !== "stand") {
@@ -41,9 +45,71 @@
                 setTimeout(() => {
                     mainImg.src = "stand.png";
                     db.ref('currentGift').set("stand");
-                }, 4000); // 4 секунды на пощечину
+                }, 4000); // 4 секунды на реакцию
             }
         });
+
+        // --- ЛОГИКА ПЕРЕМЕЩЕНИЯ КАРТИНКИ (DRAG AND DROP) ---
+        const draggable = document.getElementById('giftList');
+        let active = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Определяем, куда нажали
+        const dragStart = (e) => {
+            if (e.type === "touchstart") {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+            if (e.target === draggable) active = true;
+        };
+
+        const dragEnd = () => {
+            initialX = currentX;
+            initialY = currentY;
+            active = false;
+        };
+
+        // Двигаем
+        const drag = (e) => {
+            if (active) {
+                e.preventDefault();
+                if (e.type === "touchmove") {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+                xOffset = currentX;
+                yOffset = currentY;
+                
+                // Применяем новые координаты
+                setTranslate(currentX, currentY, draggable);
+            }
+        };
+
+        const setTranslate = (xPos, yPos, el) => {
+            // Убираем translateY(-50%), который был в CSS по умолчанию
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`; 
+        };
+
+        // События для мыши (ПК)
+        document.addEventListener("mousedown", dragStart, false);
+        document.addEventListener("mouseup", dragEnd, false);
+        document.addEventListener("mousemove", drag, false);
+
+        // События для тача (Телефон)
+        document.addEventListener("touchstart", dragStart, false);
+        document.addEventListener("touchend", dragEnd, false);
+        document.addEventListener("touchmove", drag, false);
     </script>
 </body>
 </html>
